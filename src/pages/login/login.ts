@@ -45,7 +45,7 @@ export class LoginPage implements AfterViewInit{
 
 
     // Verificar si la clave es valida
-    this.LoginService.validarSesion( this.pass, this.user );
+    this.LoginService.validarSesion( this.user,this.pass );
         // .then( valido =>{
 
         //   loading.dismiss();

@@ -83,7 +83,6 @@ export class LoginProvider {
         }
       }
     );
-    //console.log(this.ObjResultado);
   }
   /**
    * Declarar una promesa
@@ -101,7 +100,6 @@ export class LoginProvider {
           console.log('Entro al ELSE');
           localStorage.removeItem('name');
         }
-
       }
     });
     return promesa;

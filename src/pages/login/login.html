@@ -1,0 +1,42 @@
+<ion-header>
+    <ion-navbar color="primary">
+        <ion-title text-center><img src="assets/imgs/mcv6.png"></ion-title>
+    </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+    <ion-slides pager>
+        <ion-slide>
+            <ion-list>
+                <h2 class="slide-title">Iniciar sesión</h2>
+                <ion-item>
+                    <ion-label>Usuario: </ion-label>
+                    <ion-input type="text" id="user" [(ngModel)]="user" placeholder="..."></ion-input>
+                </ion-item>
+
+                <ion-item>
+                    <ion-label>Contraseña: </ion-label>
+                    <ion-input type="password" id="pass" [(ngModel)]="pass" (keyup.enter)="continuar()" placeholder="..."></ion-input>
+                </ion-item>
+            </ion-list>
+            <button ion-button block [disabled]="pass.length < 3" (click)="continuar()">Iniciar sesión</button>
+        </ion-slide>
+        <!-- Ultimo Slide -->
+        <ion-slide>
+            <img src="assets/imgs/home.png" class="slide-image" />
+            <h2 class="slide-title">¿Listo para empezar?</h2>
+
+            <button ion-button large clear icon-right color="primary" (click)="ingresar()">
+          Continuar
+          <ion-icon name="arrow-forward"></ion-icon>
+        </button>
+
+        </ion-slide>
+        <!-- Fin del último slide -->
+
+    </ion-slides>
+
+
+</ion-content>

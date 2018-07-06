@@ -33,46 +33,84 @@ export class LoginPage implements AfterViewInit{
       //this.navCtrl.popToRoot(); Regresar a la pagina principal
   }
   continuar(){
-    // this.LoginService.validarSesion(this.user,this.pass);
-    // let loading = this.loadingCtrl.create({
-    //   content: "Espere por favor..."
-    // });
-    // loading.present();
-    // setTimeout(()=>{
-    //   loading.dismiss();
-    //   this.slides.slideNext();
-    // },500);
+    let ObjMEnsaje: any;
+    let loading = this.loadingCtrl.create({
+      content: 'Iniciando la aplicación. Favor de esperar...'
+    });
+    loading.present();
+
+    this.LoginService.validarSesion(this.user,this.pass).subscribe((DATARCV)=>{
+      console.log('DATARCV-->',DATARCV);
+      ObjMEnsaje = DATARCV;
+      console.log('Respuesa-->',ObjMEnsaje);
+    if (ObjMEnsaje.error == false && ObjMEnsaje.type == 0) {
+      loading.dismiss();
+      const alert = this.alertCtrl.create({
+        title: 'OK',
+        subTitle: ObjMEnsaje.message,
+        buttons: [
+          {
+            text: 'NO',
+            role: 'cancel',
+            handler: ()=> {
+              console.log('Cancelar');
+            }
+          },{
+            text: 'SI',
+            role: 'si',
+            handler: ()=> {
+              console.log('boton OK');
+            }
+          }
+        ]
+      });
+      alert.present();
+    }else{
+      if (ObjMEnsaje.type == 1){
+        loading.dismiss();
+        const alert = this.alertCtrl.create({
+          title: 'Error',
+          subTitle: ObjMEnsaje.message,
+          buttons: [{
+              text: 'Ok',
+              role: 'ok',
+              handler: ()=> {
+                console.log('boton OK');
+              }
+            }]
+        });
+        alert.present();
+      } else if (ObjMEnsaje.type == 2){
+        loading.dismiss();
+        const alert = this.alertCtrl.create({
+          title: 'Error',
+          subTitle: ObjMEnsaje.message,
+          buttons: [{
+              text: 'Ok',
+              role: 'ok',
+              handler: ()=> {
+                console.log('boton OK');
+              }
+            }]
+        });
+        alert.present();
+      }
+
+    }
+    });
+
+
 
 
     // Verificar si la clave es valida
-    this.LoginService.validarSesion( this.user,this.pass );
-        // .then( valido =>{
+    // if (this.LoginService.validarSesion(this.user,this.pass)) {
+    //   this.slides.lockSwipes(false);
+    //   this.slides.slideNext();
+    //   this.slides.lockSwipes(true);
+    // }else{
+    //   console.log('Error-->> Provider validation');
+    // }
 
-        //   loading.dismiss();
-
-        //   if( valido ){
-        //     // continuar a la siguiente pantalla
-        //     this.slides.lockSwipes(false);
-        //     this.slides.slideNext();
-        //     this.slides.lockSwipes(true);
-
-        //   }else{
-
-        //     this.alertCtrl.create({
-        //       title: "Clave no es correcta",
-        //       subTitle: "Por favor verifique su clave, o hable con el adminsitrador",
-        //       buttons: ["Ok!"]
-        //     }).present();
-
-        //   }
-
-
-
-        // })
-        // .catch( error=>{
-        //     loading.dismiss();
-        //     console.log("ERROR en verifica_usuario: " + JSON.stringify( error ));
-        // })
 
   }
 

@@ -5,6 +5,7 @@ import { Storage } from '@ionic/storage'
 import { Platform, AlertController } from 'ionic-angular';
 import { UsuarioInterface } from '../../interfaces/usuario.interface';
 import { LoadingController } from 'ionic-angular';
+import { AlertsProvider } from '../alerts/alerts';
 /*
   Generated class for the LoginProvider provider.
 
@@ -25,14 +26,10 @@ export class LoginProvider {
   public idUsuario: number;
   public idCliente: number;
 
-  constructor(private httpW: HttpClient,private storageData: Storage,private platformD: Platform,public alertCtrl: AlertController,private loadingCtrl: LoadingController) {
+  constructor(private httpW: HttpClient,private storageData: Storage,private platformD: Platform,public alertCtrl: AlertController,private loadingCtrl: LoadingController, private alertsProviderO: AlertsProvider) {
     console.log('Hello LoginProvider Provider');
   }
-  validarSesion(emailToSend: string, passToSend: string){
-    let loading = this.loadingCtrl.create({
-      content: "Espere por favor..."
-    });
-    loading.present();
+  validarSesion(emailToSend: string, passToSend: string): Observable<any> {
     emailToSend= emailToSend.toLowerCase();
     console.log(emailToSend,passToSend);
     console.log(this.URL_);
@@ -47,7 +44,7 @@ export class LoginProvider {
       headers:{'Content-Type':'application/x-www-form-urlencoded'}
     };
     //Haciendo peticion POST
-    this.httpW.post(this.URL_,DataSend,HEADERS).subscribe(
+  this.httpW.post(this.URL_,DataSend,HEADERS).subscribe(
       (ObjSesion)=>{
         console.log('Entro a promise POST',ObjSesion);
         this.ObjResultado = ObjSesion;
@@ -64,25 +61,48 @@ export class LoginProvider {
           console.log('nombreUsuario',this.nombreUsuario);
           console.log('Impresion del this.objPermisos',this.objPermisos);
           this.guardarStorage();
-          loading.dismiss();
-          const alert = this.alertCtrl.create({
-            title: 'OK',
-            subTitle: 'Has iniciado con una cuenta de administrador, ¿Entiendes el riesgo?',
-            buttons: ['OK']
+          let objRespuesta = {
+            error: false,
+            type: 0,
+            message: 'Has iniciado con una cuenta de administrador, ¿Entiendes el riesgo? saldras de la plataforma'
+          };
+          console.log('OK');
+          return Observable.create((observer_: Observable<any>)=> {
+            objRespuesta;
           });
-          alert.present();
         }else{
-          loading.dismiss();
-          const alert = this.alertCtrl.create({
-            title: 'Error',
-            subTitle: 'Usuario o Contraseña incorrectos',
-            buttons: ['OK']
+          let objRespuesta = {
+            error: false,
+            type: 1,
+            message: 'Usuario o Contraseña incorrectos'
+          };
+          console.log('Error de credenciales!---->>12');
+          return Observable.create((observer_: Observable<any>)=> {
+            objRespuesta;
           });
-          alert.present();
-          console.log('Error de credenciales!---->>');
         }
+      },(error)=>{
+        let objRespuesta = {
+          error: false,
+          type: 2,
+          message: error.message
+        };
+        console.log('Error en el servicio!---->>');
+        return Observable.create((observer_: Observable<any>)=> {
+          objRespuesta;
+        });
       }
     );
+    let objRespuesta = {
+      error: false,
+      type: 2,
+      message: 'ErorGeneral'
+    };
+    console.log('Error General');
+
+    return Observable.create((observer_: Observable<any>)=> {
+      objRespuesta;
+    });
   }
   /**
    * Declarar una promesa

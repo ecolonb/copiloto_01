@@ -9,7 +9,7 @@ import { HomePage,LoginPage } from '../pages/index.paginas';
 import { LoginProvider } from '../providers/login/login';
 import { HttpClientModule } from '@angular/common/http';
 import { AlertsProvider } from '../providers/alerts/alerts';
-
+import { AgmCoreModule } from '@agm/core';
 @NgModule({
   declarations: [
     MyApp,
@@ -20,7 +20,10 @@ import { AlertsProvider } from '../providers/alerts/alerts';
     BrowserModule,
     IonicModule.forRoot(MyApp),
     HttpClientModule,
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyBg3QQiQIiSujpuC-RMqdAsjAE0ttBcoxA'
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [

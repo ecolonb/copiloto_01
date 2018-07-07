@@ -29,7 +29,7 @@ export class LoginProvider {
   constructor(private httpW: HttpClient,private storageData: Storage,private platformD: Platform,public alertCtrl: AlertController,private loadingCtrl: LoadingController, private alertsProviderO: AlertsProvider) {
     console.log('Hello LoginProvider Provider');
   }
-  validarSesion(emailToSend: string, passToSend: string): Observable<any> {
+  validarSesion(emailToSend: string, passToSend: string): Observable<any>{
     emailToSend= emailToSend.toLowerCase();
     console.log(emailToSend,passToSend);
     console.log(this.URL_);
@@ -43,67 +43,61 @@ export class LoginProvider {
     let HEADERS = {
       headers:{'Content-Type':'application/x-www-form-urlencoded'}
     };
-    //Haciendo peticion POST
-  this.httpW.post(this.URL_,DataSend,HEADERS).subscribe(
-      (ObjSesion)=>{
-        console.log('Entro a promise POST',ObjSesion);
-        this.ObjResultado = ObjSesion;
-        if (this.ObjResultado.error==false){
-          this.activo=true;
-          this.razonSocial = this.ObjResultado.razonSocial;
-          this.nombreUsuario=this.ObjResultado.nombreUsuario;
-          this.urlImagen=this.ObjResultado.urlImagen;
-          this.idUsuario=this.ObjResultado.idUsuario;
-          this.idCliente=this.ObjResultado.idCliente;
-          this.objPermisos=this.ObjResultado.permisos;
-          console.log('Datos correctos, usar Interfaz para recibir los datos->',this.razonSocial);
-          console.log('ID USUARIO',this.idUsuario);
-          console.log('nombreUsuario',this.nombreUsuario);
-          console.log('Impresion del this.objPermisos',this.objPermisos);
-          this.guardarStorage();
-          let objRespuesta = {
-            error: false,
-            type: 0,
-            message: 'Has iniciado con una cuenta de administrador, ¿Entiendes el riesgo? saldras de la plataforma'
-          };
-          console.log('OK');
-          return Observable.create((observer_: Observable<any>)=> {
-            objRespuesta;
-          });
-        }else{
-          let objRespuesta = {
-            error: false,
-            type: 1,
-            message: 'Usuario o Contraseña incorrectos'
-          };
-          console.log('Error de credenciales!---->>12');
-          return Observable.create((observer_: Observable<any>)=> {
-            objRespuesta;
-          });
-        }
-      },(error)=>{
-        let objRespuesta = {
-          error: false,
-          type: 2,
-          message: error.message
-        };
-        console.log('Error en el servicio!---->>');
-        return Observable.create((observer_: Observable<any>)=> {
-          objRespuesta;
-        });
-      }
-    );
-    let objRespuesta = {
-      error: false,
-      type: 2,
-      message: 'ErorGeneral'
-    };
-    console.log('Error General');
+    return this.httpW.post<Observable<any>>(this.URL_,DataSend,HEADERS);
+    }
 
-    return Observable.create((observer_: Observable<any>)=> {
-      objRespuesta;
-    });
-  }
+    //Haciendo peticion POST
+  // this.httpW.post(this.URL_,DataSend,HEADERS).subscribe(
+  //     (ObjSesion)=>{
+  //       console.log('Entro a promise POST',ObjSesion);
+  //       this.ObjResultado = ObjSesion;
+  //       if (this.ObjResultado.error==false){
+  //         this.activo=true;
+  //         this.razonSocial = this.ObjResultado.razonSocial;
+  //         this.nombreUsuario=this.ObjResultado.nombreUsuario;
+  //         this.urlImagen=this.ObjResultado.urlImagen;
+  //         this.idUsuario=this.ObjResultado.idUsuario;
+  //         this.idCliente=this.ObjResultado.idCliente;
+  //         this.objPermisos=this.ObjResultado.permisos;
+  //         console.log('Datos correctos, usar Interfaz para recibir los datos->',this.razonSocial);
+  //         console.log('ID USUARIO',this.idUsuario);
+  //         console.log('nombreUsuario',this.nombreUsuario);
+  //         console.log('Impresion del this.objPermisos',this.objPermisos);
+  //         this.guardarStorage();
+  //         let objRespuesta = {
+  //           error: false,
+  //           type: 0,
+  //           message: 'Has iniciado con una cuenta de administrador, ¿Entiendes el riesgo? saldras de la plataforma'
+  //         };
+  //         console.log('OK');
+  //         return Observable.create((observer_: Observable<any>)=> {
+  //           objRespuesta;
+  //         });
+  //       }else{
+  //         let objRespuesta = {
+  //           error: false,
+  //           type: 1,
+  //           message: 'Usuario o Contraseña incorrectos'
+  //         };
+  //         console.log('Error de credenciales!---->>12');
+  //         return Observable.create((observer_: Observable<any>)=> {
+  //           objRespuesta;
+  //         });
+  //       }
+  //     },(error)=>{
+  //       let objRespuesta = {
+  //         error: false,
+  //         type: 2,
+  //         message: error.message
+  //       };
+  //       console.log('Error en el servicio!---->>');
+  //       return Observable.create((observer_: Observable<any>)=> {
+  //         objRespuesta;
+  //       });
+  //     }
+  //   );
+
+
   /**
    * Declarar una promesa
    * let promesa = new Promise((resolve, reject)=>{});
@@ -121,7 +115,26 @@ export class LoginProvider {
           localStorage.removeItem('name');
         }
       }
+      console.log('Guardar storage');
     });
     return promesa;
   }
+  guardarServicio(ObjSesion:any){
+    console.log('Guardar sesion',ObjSesion);
+    this.ObjResultado = ObjSesion;
+    if (this.ObjResultado.error==false){
+              this.activo=true;
+              this.razonSocial = this.ObjResultado.razonSocial;
+              this.nombreUsuario=this.ObjResultado.nombreUsuario;
+              this.urlImagen=this.ObjResultado.urlImagen;
+              this.idUsuario=this.ObjResultado.idUsuario;
+              this.idCliente=this.ObjResultado.idCliente;
+              this.objPermisos=this.ObjResultado.permisos;
+              console.log('Datos correctos, usar Interfaz para recibir los datos->',this.razonSocial);
+              console.log('ID USUARIO',this.idUsuario);
+              console.log('nombreUsuario',this.nombreUsuario);
+              console.log('Impresion del this.objPermisos',this.objPermisos);
+              this.guardarStorage();
+  }
+}
 }

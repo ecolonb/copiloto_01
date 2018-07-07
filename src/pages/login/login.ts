@@ -40,51 +40,42 @@ export class LoginPage implements AfterViewInit{
     loading.present();
 
     this.LoginService.validarSesion(this.user,this.pass).subscribe((DATARCV)=>{
-      console.log('DATARCV-->',DATARCV);
+      if(DATARCV){
+        console.log('DATARCV-->',DATARCV);
       ObjMEnsaje = DATARCV;
       console.log('Respuesa-->',ObjMEnsaje);
-    if (ObjMEnsaje.error == false && ObjMEnsaje.type == 0) {
-      loading.dismiss();
-      const alert = this.alertCtrl.create({
-        title: 'OK',
-        subTitle: ObjMEnsaje.message,
-        buttons: [
-          {
-            text: 'NO',
-            role: 'cancel',
-            handler: ()=> {
-              console.log('Cancelar');
-            }
-          },{
-            text: 'SI',
-            role: 'si',
-            handler: ()=> {
-              console.log('boton OK');
-            }
-          }
-        ]
-      });
-      alert.present();
-    }else{
-      if (ObjMEnsaje.type == 1){
+      if (ObjMEnsaje.error == false) {
         loading.dismiss();
         const alert = this.alertCtrl.create({
-          title: 'Error',
-          subTitle: ObjMEnsaje.message,
-          buttons: [{
-              text: 'Ok',
-              role: 'ok',
+          title: 'OK',
+          subTitle: 'HAs inciado como admin',
+          buttons: [
+            {
+              text: 'NO',
+              role: 'cancel',
               handler: ()=> {
-                console.log('boton OK');
+                console.log('Cancelar');
               }
-            }]
+            },{
+              text: 'SI',
+              role: 'si',
+              handler: ()=> {
+                //Guardar en el storage
+                this.LoginService.guardarServicio(DATARCV);
+                console.log('boton OK');
+                this.slides.lockSwipes(false);
+                this.slides.slideNext();
+                this.slides.lockSwipes(true);
+              }
+            }
+          ]
         });
         alert.present();
-      } else if (ObjMEnsaje.type == 2){
+      }else{
         loading.dismiss();
         const alert = this.alertCtrl.create({
           title: 'Error',
-          subTitle: ObjMEnsaje.message,
+          subTitle: ObjMEnsaje.mensaje,
           buttons: [{
               text: 'Ok',
               role: 'ok',
@@ -95,31 +86,33 @@ export class LoginPage implements AfterViewInit{
         });
         alert.present();
       }
+      }else{
+        console.log('no hay datos');
+      }
 
-    }
+
+    },(error)=>{
+      console.log('Error',error);
+      loading.dismiss();
+        const alert = this.alertCtrl.create({
+          title: 'Error',
+          subTitle: error.message,
+          buttons: [{
+              text: 'Ok',
+              role: 'ok',
+              handler: ()=> {
+                console.log('boton OK');
+              }
+            }]
+        });
+        alert.present();
     });
-
-
-
-
-    // Verificar si la clave es valida
-    // if (this.LoginService.validarSesion(this.user,this.pass)) {
-    //   this.slides.lockSwipes(false);
-    //   this.slides.slideNext();
-    //   this.slides.lockSwipes(true);
-    // }else{
-    //   console.log('Error-->> Provider validation');
-    // }
-
-
   }
-
 
   ingresar(){
     // tenemos la clave, ir al home
     this.navCtrl.setRoot( HomePage );
   }
-
 
   ngAfterViewInit(){
 

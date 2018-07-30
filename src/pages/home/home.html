@@ -1,13 +1,82 @@
+<ion-menu [content]="content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Menu</ion-title>
+      </ion-toolbar>
+    </ion-header>
+  
+    <ion-content>
+      <ion-list>
+        <button menuClose ion-item >
+          Cerrar
+        </button>
+      </ion-list>
+  
+      <!-- Start of added lines -->
+      <ion-list>
+        <ion-item-sliding #item>
+          <ion-item>
+            Item
+          </ion-item>
+          <ion-item-options side="left">
+            <button ion-button>Favorite</button>
+            <button ion-button color="danger">Share</button>
+          </ion-item-options>
+          <ion-item-options side="right">
+            <button ion-button >Unread</button>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-list>
+      <!-- End of added lines -->
+  
+    </ion-content>
+  
+  </ion-menu>
+  
+  <!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
+  <ion-nav [root]="LoginPage_" #content swipeBackEnabled="false"></ion-nav>
+<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
 <ion-header>
+    <ion-navbar color="primary">
+      <button ion-button menuToggle icon-only>
+        <ion-icon name='menu'></ion-icon>
+      </button>
+      <ion-title>
+        Menus
+      </ion-title>
+    </ion-navbar>
+  </ion-header>
+  <ion-content padding>
+    <button ion-button block menuToggle>Toggle Menu</button>
+  </ion-content>
+<!-- <ion-header>
     <ion-navbar color="primary">
         <ion-title>
             Mi Copiloto Movil
         </ion-title>
     </ion-navbar>
-</ion-header>
+</ion-header> -->
 
 <ion-content>
     <agm-map [latitude]="lat" [longitude]="lng">
         <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
     </agm-map>
+    <ion-fab top right edge>
+        <button ion-fab mini><ion-icon name="add"></ion-icon></button>
+        <ion-fab-list>
+          <button ion-fab><ion-icon name="logo-facebook"></ion-icon></button>
+          <button ion-fab><ion-icon name="logo-twitter"></ion-icon></button>
+          <button ion-fab><ion-icon name="logo-vimeo"></ion-icon></button>
+          <button ion-fab><ion-icon name="logo-googleplus"></ion-icon></button>
+        </ion-fab-list>
+      </ion-fab>
+    
+      <ion-fab left bottom>
+        <button ion-fab color="seconday"><ion-icon name="arrow-dropright"></ion-icon></button>
+        <ion-fab-list side="right">
+          <button (click)="cerrarSesion()" ion-fab><ion-icon name="md-log-out"></ion-icon></button>
+          <button ion-fab><ion-icon name="md-mail"></ion-icon></button>
+          <button ion-fab><ion-icon name="ios-navigate"></ion-icon></button>
+        </ion-fab-list>
+      </ion-fab>
 </ion-content>

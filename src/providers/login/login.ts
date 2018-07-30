@@ -17,7 +17,7 @@ export class LoginProvider {
   //Declaracion de variables globales
   private activo: boolean = false;
   private ObjResultado: any;
-  private URL_='http://localhost/rest/index.php/login';
+  private URL_='http://pruebaunne01.cloudapp.net/dev5/api_rest/api/Login';
   public objPermisos: UsuarioInterface;
 
   public razonSocial: string;
@@ -29,23 +29,45 @@ export class LoginProvider {
   constructor(private httpW: HttpClient,private storageData: Storage,private platformD: Platform,public alertCtrl: AlertController,private loadingCtrl: LoadingController, private alertsProviderO: AlertsProvider) {
     console.log('Hello LoginProvider Provider');
   }
-  validarSesion(emailToSend: string, passToSend: string): Observable<any>{
-    emailToSend= emailToSend.toLowerCase();
-    console.log(emailToSend,passToSend);
+  validarSesion(userToSend: string, passToSend: string): Observable<any>{
+    userToSend= userToSend.toLowerCase();
+    console.log(userToSend,passToSend);
     console.log(this.URL_);
 
     //Preparando los datos a enviar y las cabeceras
     let DataSend = (
-      "email=" + emailToSend +
-      "&pass=" + passToSend
+      "user=" + userToSend +
+      "&password=" + passToSend
     );
     console.log('DataSend',DataSend);
     let HEADERS = {
-      headers:{'Content-Type':'application/x-www-form-urlencoded'}
+      headers:{'Content-Type':'application/json; charset=utf-8'}
     };
-    return this.httpW.post<Observable<any>>(this.URL_,DataSend,HEADERS);
-    }
 
+    let dataSendform = {
+      "user": userToSend,
+      "password": btoa(passToSend)
+    }
+    console.log('dataSendform',dataSendform);
+    return this.httpW.post<Observable<any>>(this.URL_, dataSendform, HEADERS).map((RESULT)=>{
+      console.log('RESULT provider', RESULT);
+
+      return RESULT;
+    });;
+  }
+
+//   access-control-allow-credentials →true
+// access-control-allow-headers →content-Type, accept, origin, X-Requested-With, Authorization, name
+// access-control-allow-methods →POST, PUT, DELETE, GET, OPTIONS
+// access-control-allow-origin →*
+// cache-control →no-cache
+// content-length →124
+// content-type →application/json; charset=utf-8
+  
+  cerrarSesion(){
+    localStorage.clear();
+
+  }
     //Haciendo peticion POST
   // this.httpW.post(this.URL_,DataSend,HEADERS).subscribe(
   //     (ObjSesion)=>{
